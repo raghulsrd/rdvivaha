@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COLLECTIONS | RADHA DIAMONDS</title>
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/avantgarde-tk');
+
+    :root {
+        --black: #050505;
+        --silver-light: #f5f5f5;
+        --silver-mid: #a8a8a8;
+        --silver-dark: #333333;
+        --font-main: 'Avantgarde', 'TeX Gyre Adventor', 'URW Gothic L', sans-serif;
+        --gradient-silver: linear-gradient(135deg, #ffffff 0%, #a8a8a8 50%, #4a4a4a 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+    body { background-color: var(--black); color: var(--silver-light); font-family: var(--font-main); overflow-x: hidden; }
+
+    /* --- BACKGROUND & CURSOR --- */
+    #fluid-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.8; pointer-events: none; }
+    #custom-cursor { 
+        width: 15px; height: 15px; background: white; border-radius: 50%; 
+        position: fixed; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px #fff; 
+        transform: translate(-50%, -50%); 
+        z-index: 99999;
+    }
+
+    /* --- HEADER --- */
+    header { padding: 80px 10% 20px; text-align: center; }
+    h1 { 
+        font-size: clamp(2rem, 8vw, 3.5rem); 
+        letter-spacing: clamp(5px, 2vw, 15px); 
+        background: var(--gradient-silver); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        margin-bottom: 20px; 
+    }
+
+    /* --- FILTER SYSTEM --- */
+    .filter-container { 
+        display: flex; 
+        justify-content: center; 
+        gap: 10px; 
+        margin: 20px auto 40px; 
+        padding: 0 5%;
+        flex-wrap: wrap; 
+    }
+    .filter-btn {
+        background: transparent; border: 1px solid var(--silver-dark); color: var(--silver-mid);
+        padding: 8px 18px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.4s;
+    }
+    .filter-btn.active, .filter-btn:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); }
+
+    /* --- JEWELRY GRID --- */
+    .jewel-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+        gap: 20px; 
+        padding: 0 10%; 
+        margin-bottom: 80px; 
+    }
+    .jewel-card { 
+        background: #0a0a0a; border: 1px solid var(--silver-dark); padding: 12px; 
+        transition: 0.5s; animation: fadeIn 0.8s ease forwards;
+    }
+    .jewel-card img { width: 100%; height: 280px; object-fit: cover; filter: grayscale(100%); transition: 0.5s; }
+    .jewel-info { padding: 12px 0; text-align: center; }
+    .jewel-info h3 { font-size: 0.9rem; letter-spacing: 2px; }
+
+    /* --- OVERLAY DETAILS --- */
+    .overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000;
+        display: none; align-items: center; justify-content: center; overflow-y: auto;
+    }
+    .overlay.active { display: flex; }
+    .overlay-content {
+        background: #0a0a0a; border: 1px solid var(--silver-dark); 
+        width: 100%; min-height: 100vh;
+        display: flex; flex-direction: column; position: relative;
+    }
+    .close-overlay { 
+        position: fixed; top: 20px; right: 20px; font-size: 2.5rem; color: white; 
+        background: rgba(0,0,0,0.5); border-radius: 50%; width: 50px; height: 50px; 
+        border: none; z-index: 10001;
+    }
+    .overlay-img { width: 100%; height: 40vh; }
+    .overlay-img img { width: 100%; height: 100%; object-fit: cover; }
+    .overlay-text { padding: 30px 20px; text-align: left; }
+
+    /* --- MOBILE SPECIFIC FIXES --- */
+    @media (max-width: 768px) {
+        * { cursor: auto !important; }
+        #custom-cursor { display: none !important; }
+        
+        header { padding: 60px 5% 10px; }
+        .jewel-grid { 
+            grid-template-columns: 1fr; /* Stack items vertically on mobile for clarity */
+            padding: 0 5%; 
+        }
+        .jewel-card img { height: 350px; } /* Larger images for single column */
+        
+        .overlay-content { height: 100%; justify-content: flex-start; }
+        .overlay-text h2 { font-size: 1.5rem; letter-spacing: 3px; }
+        
+        /* Ensure the "Inquire Now" button is easy to tap */
+        .overlay-text .filter-btn { padding: 20px; font-size: 1rem; }
+    }
+
+    /* Tablet adjustment */
+    @media (min-width: 769px) {
+        .overlay-content { flex-direction: row; min-height: auto; width: 90%; max-width: 1000px; }
+        .overlay-img { width: 50%; height: auto; }
+        .overlay-text { width: 50%; padding: 50px; }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* 1. Find your existing img rule and ensure it has the transition */
+.jewel-card img { 
+    width: 100%; 
+    height: 280px; 
+    object-fit: cover; 
+    filter: grayscale(100%); /* Keeps it B&W by default */
+    transition: 0.5s ease;    /* Smooth transition effect */
+}
+
+/* 2. Add this new rule to remove grayscale on hover */
+.jewel-card:hover img { 
+    filter: grayscale(0%); 
+}
+@media (max-width: 768px) {
+    .jewel-card img {
+        filter: grayscale(0%); /* Always show color on mobile */
+    }
+}
+</style>
+</head>
+<body>
+
+    <canvas id="fluid-canvas"></canvas>
+    <div id="custom-cursor"></div>
+
+    <header>
+        <a href="index.html" style="text-decoration: none; color: var(--silver-mid); letter-spacing: 5px; font-size: 0.8rem;">← BACK TO HOME</a>
+        <h1 style="margin-top: 20px;">COLLECTIONS</h1>
+    </header>
+
+    <div class="filter-container">
+        <button class="filter-btn active" onclick="filterJewels('all')">All</button>
+        <button class="filter-btn" onclick="filterJewels('ring')">Rings</button>
+        <button class="filter-btn" onclick="filterJewels('earring')">Earrings</button>
+        <button class="filter-btn" onclick="filterJewels('necklace')">Necklaces</button>
+        <button class="filter-btn" onclick="filterJewels('bracelet')">Bracelets</button>
+    </div>
+
+    <div class="jewel-grid" id="jewelGrid">
+        </div>
+
+    <div class="overlay" id="jewelOverlay">
+        <button class="close-overlay" onclick="closeOverlay()">×</button>
+        <div class="overlay-content" id="overlayContent">
+            </div>
+    </div>
+
+    <script>
+        const jewels = [
+    // BRACELETS
+    { id: 1, type: 'bracelet', name: 'Elite Cuff', price: 'Inquire', img: 'images/bracelet.jpg', desc: 'A statement of modern luxury.', specs: ['Material: Platinum', 'Stone: VVS1 Diamond'] },
+    { id: 2, type: 'bracelet', name: 'Tennis Link', price: 'Inquire', img: 'images/bracelet1.jpg', desc: 'Classic brilliance for the wrist.', specs: ['Cut: Round Brilliant'] },
+    { id: 3, type: 'bracelet', name: 'Diamond Bangle', price: 'Inquire', img: 'images/bracelet2.jpg', desc: 'Handcrafted elegance.', specs: ['Metal: 18k White Gold'] },
+    { id: 4, type: 'bracelet', name: 'Artisan Wrap', price: 'Inquire', img: 'images/bracelet3.jpg', desc: 'A unique wrap-around design.', specs: ['Setting: Micro-pave'] },
+
+    // CHAINS
+    { id: 5, type: 'chain', name: 'Cuban Diamond', price: 'Inquire', img: 'images/chain1.jpg', desc: 'Bold and brilliant.', specs: ['Type: Cuban Link'] },
+    { id: 6, type: 'chain', name: 'Frost Chain', price: 'Inquire', img: 'images/chain2.jpg', desc: 'Ice-cold diamond setting.', specs: ['Clarity: VS+'] },
+    { id: 7, type: 'chain', name: 'Minimalist Link', price: 'Inquire', img: 'images/chain3.jpg', desc: 'Subtle everyday luxury.', specs: ['Length: 20"'] },
+    { id: 8, type: 'chain', name: 'Heavy Carat Link', price: 'Inquire', img: 'images/chain4.jpg', desc: 'Substantial weight and shine.', specs: ['Carat: 12.5ctw'] },
+    { id: 9, type: 'chain', name: 'Sovereign Chain', price: 'Inquire', img: 'images/chain5.jpg', desc: 'The pinnacle of craftsmanship.', specs: ['Metal: Solid Gold'] },
+    { id: 10, type: 'chain', name: 'Drip Chain', price: 'Inquire', img: 'images/chain6.jpg', desc: 'Liquid-like diamond flow.', specs: ['Style: Seamless'] },
+    { id: 11, type: 'chain', name: 'Bespoke Link', price: 'Inquire', img: 'images/chain7.jpg', desc: 'Custom designed for you.', specs: ['Hand-set'] },
+    { id: 12, type: 'chain', name: 'Signature Rope', price: 'Inquire', img: 'images/chain8.jpg', desc: 'Timeless rope style with diamonds.', specs: ['Cut: Ideal'] },
+
+    // EARRINGS
+    { id: 13, type: 'earring', name: 'Stud Radiance', price: 'Inquire', img: 'images/ear1.jpg', desc: 'Pure light in every stud.', specs: ['Type: Studs'] },
+    { id: 14, type: 'earring', name: 'Halo Drops', price: 'Inquire', img: 'images/ear2.jpg', desc: 'Dangling brilliance.', specs: ['Style: Drop'] },
+    { id: 15, type: 'earring', name: 'Galaxy Hoops', price: 'Inquire', img: 'images/ear3.jpg', desc: 'Large diamond-encrusted hoops.', specs: ['Size: 40mm'] },
+    { id: 16, type: 'earring', name: 'Petal Earrings', price: 'Inquire', img: 'images/ear4.jpg', desc: 'Nature-inspired elegance.', specs: ['Design: Floral'] },
+    { id: 17, type: 'earring', name: 'Nightshade Drops', price: 'Inquire', img: 'images/ear5.jpg', desc: 'Rare black diamond accents.', specs: ['Unique Item'] },
+    { id: 18, type: 'earring', name: 'Classic Pear', price: 'Inquire', img: 'images/ear6.jpg', desc: 'Sophisticated pear-cut drops.', specs: ['Cut: Pear'] },
+
+    // NECKLACES
+    { id: 19, type: 'necklace', name: 'Grand Gala', price: 'Inquire', img: 'images/neck1.jpg', desc: 'Red carpet ready.', specs: ['Total Carat: 25ct'] },
+    { id: 20, type: 'necklace', name: 'Royal Choker', price: 'Inquire', img: 'images/neck2.jpg', desc: 'Fit for royalty.', specs: ['Fit: Choker'] },
+
+    // RINGS
+    { id: 21, type: 'ring', name: 'Solitaire King', price: 'Inquire', img: 'images/ring.jpg', desc: 'The ultimate engagement ring.', specs: ['Stone: 3ct Diamond'] },
+    { id: 22, type: 'ring', name: 'Eternity Band', price: 'Inquire', img: 'images/ring1.jpg', desc: 'Endless love, endless diamonds.', specs: ['Style: Band'] },
+    { id: 23, type: 'ring', name: 'Princess Cut', price: 'Inquire', img: 'images/ring2.jpg', desc: 'Square brilliance.', specs: ['Cut: Princess'] },
+    { id: 24, type: 'ring', name: 'Vintage Marquise', price: 'Inquire', img: 'images/ring3.jpg', desc: 'Antique-inspired beauty.', specs: ['Era: Edwardian Style'] },
+    { id: 25, type: 'ring', name: 'Oval Elegance', price: 'Inquire', img: 'images/ring4.jpg', desc: 'Modern elongated design.', specs: ['Stone: Oval Cut'] },
+    { id: 26, type: 'ring', name: 'Emerald Step', price: 'Inquire', img: 'images/ring5.jpg', desc: 'Classic step-cut emerald diamond.', specs: ['Shape: Emerald'] },
+    { id: 27, type: 'ring', name: 'Toi et Moi', price: 'Inquire', img: 'images/ring6.jpg', desc: 'Two stones, one heart.', specs: ['Style: Dual Stone'] },
+    { id: 28, type: 'ring', name: 'Pavé Dream', price: 'Inquire', img: 'images/ring7.jpg', desc: 'Encrusted in light.', specs: ['Setting: Pavé'] },
+    { id: 29, type: 'ring', name: 'Rose Gold Muse', price: 'Inquire', img: 'images/ring8.jpg', desc: 'Warm rose gold hues.', specs: ['Metal: Rose Gold'] },
+    { id: 30, type: 'ring', name: 'Infinity Ring', price: 'Inquire', img: 'images/ring9.jpg', desc: 'A symbol of forever.', specs: ['Concept: Infinity'] },
+    { id: 31, type: 'ring', name: 'Bold Signet', price: 'Inquire', img: 'images/ring10.jpg', desc: 'Diamond-encrusted signet.', specs: ['Gender: Unisex'] },
+    { id: 32, type: 'ring', name: 'Trinity Band', price: 'Inquire', img: 'images/ring11.jpg', desc: 'Three bands intertwined.', specs: ['Material: 3-Tone Gold'] },
+    { id: 33, type: 'ring', name: 'Midnight Solitaire', price: 'Inquire', img: 'images/ring12.jpg', desc: 'Rare blue diamond center.', specs: ['Rarity: Ultra High'] }
+];
+
+        function renderJewels(data) {
+            const grid = document.getElementById('jewelGrid');
+            grid.innerHTML = data.map(j => `
+                <div class="jewel-card" onclick="openOverlay(${j.id})">
+                    <img src="${j.img}" alt="${j.name}">
+                    <div class="jewel-info">
+                        <h3>${j.name}</h3>
+                        <p>${j.price}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterJewels(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === category);
+            });
+            const filtered = category === 'all' ? jewels : jewels.filter(j => j.type === category);
+            renderJewels(filtered);
+        }
+
+        function openOverlay(id) {
+            const j = jewels.find(item => item.id === id);
+            const content = document.getElementById('overlayContent');
+            content.innerHTML = `
+                <div class="overlay-img"><img src="${j.img}"></div>
+                <div class="overlay-text">
+                    <h2>${j.name.toUpperCase()}</h2>
+                    <p>${j.desc}</p>
+                    <ul class="overlay-details">
+                        ${j.specs.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                    <p style="margin-top: 30px; font-size: 1.5rem;">${j.price}</p>
+                    /* Update the button line inside your openOverlay function */
+<button class="filter-btn" style="width: 100%; margin-top: 20px;" onclick="location.href='contact.html'">Inquire Now</button>
+                </div>
+            `;
+            document.getElementById('jewelOverlay').classList.add('active');
+        }
+
+        function closeOverlay() {
+            document.getElementById('jewelOverlay').classList.remove('active');
+        }
+
+        /* --- BRIGHT FLUID SIMULATION --- */
+        const canvas = document.getElementById('fluid-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, size, stepX = 10, stepY = 10, cols, buffer1, buffer2;
+
+        function initFluid() {
+            width = window.innerWidth; height = window.innerHeight;
+            canvas.width = width; canvas.height = height;
+            cols = Math.floor(width / stepX) + 2;
+            size = cols * (Math.floor(height / stepY) + 2);
+            buffer1 = new Float32Array(size).fill(0);
+            buffer2 = new Float32Array(size).fill(0);
+        }
+
+        function loop() {
+            for (let i = cols; i < size - cols; i++) {
+                buffer2[i] = ((buffer1[i-1] + buffer1[i+1] + buffer1[i-cols] + buffer1[i+cols]) / 2 - buffer2[i]) * 0.98;
+            }
+            [buffer1, buffer2] = [buffer2, buffer1];
+            ctx.clearRect(0, 0, width, height);
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 2;
+            for (let i = 1; i < cols - 1; i++) {
+                for (let j = 1; j < (size / cols) - 1; j++) {
+                    let index = i + j * cols;
+                    if (Math.abs(buffer1[index]) > 0.1) {
+                        ctx.moveTo(i * stepX, j * stepY);
+                        ctx.lineTo(i * stepX + buffer1[index], j * stepY + buffer1[index]);
+                    }
+                }
+            }
+            ctx.stroke();
+            requestAnimationFrame(loop);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            let x = Math.floor(e.clientX / stepX) + 1;
+            let y = Math.floor(e.clientY / stepY) + 1;
+            if(x + y * cols < size) buffer1[x + y * cols] = 5;
+
+            if (window.innerWidth > 768) {
+                const cursor = document.getElementById('custom-cursor');
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        window.addEventListener('resize', initFluid);
+        initFluid();
+        loop();
+        renderJewels(jewels);
+    </script>
+</body>
+</html>
