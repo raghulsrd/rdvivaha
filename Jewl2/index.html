@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jewellery Try-On Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      width: 100%;
+      max-width: 1200px;
+    }
+    
+    #gallery {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .category {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .category h2 {
+      font-size: 18px;
+      color: #444;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .thumb {
+      position: relative;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+    
+    .thumb:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .thumb img {
+      display: block;
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    
+    .cambtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to right, #4A90E2, #6A5ACD);
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      font-size: 14px;
+      user-select: none;
+      gap: 6px;
+      transition: background 0.3s;
+    }
+    
+    .cambtn:hover {
+      background: linear-gradient(to right, #3A7BD5, #5A4ABC);
+    }
+
+    #arModal {
+      position: relative;
+      width: 640px;
+      max-width: 95vw;
+      height: 480px;
+      background: black;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    
+    video, canvas {
+      position: absolute;
+      top: 0; 
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+    
+    #controls {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      z-index: 20;
+      color: white;
+      font-size: 14px;
+      user-select: none;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+    }
+    
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    #closeBtn {
+      background: #e74c3c;
+    }
+    
+    #closeBtn:hover {
+      background: #c0392b;
+    }
+    
+    #cameraToggle {
+      background: #3498db;
+    }
+    
+    #cameraToggle:hover {
+      background: #2980b9;
+    }
+    
+    label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    
+    #status {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-left: auto;
+    }
+    
+    .instructions {
+      margin-top: 20px;
+      text-align: center;
+      color: #555;
+      max-width: 640px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      #gallery {
+        width: 100%;
+        max-width: 400px;
+      }
+      
+      #arModal {
+        height: 400px;
+      }
+      
+      #controls {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Virtual Jewellery Try-On</h1>
+  
+  <div class="container">
+    <div id="gallery">
+      <div class="category">
+        <h2>Necklaces</h2>
+        <div class="thumb">
+          <img src="assets/necklace.png" alt="Diamond Necklace" />
+          <div class="cambtn" data-img="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-type="necklace">📿 Try Necklace</div>
+        </div>
+        <div class="thumb">
+          <img src="assets/necklace.png" alt="Gold Necklace" />
+          <div class="cambtn" data-img="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-type="necklace">📿 Try Necklace</div>
+        </div>
+      </div>
+      
+      <div class="category">
+        <h2>Earrings</h2>
+        <div class="thumb">
+          <img src="assets/necklace.png" alt="Diamond Earrings" />
+          <div class="cambtn" data-img="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-type="earring">💎 Try Earrings</div>
+        </div>
+        <div class="thumb">
+          <img src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Gold Earrings" />
+          <div class="cambtn" data-img="https://images.unsplash.com/photo-1617038220319-276d3cfab638?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-type="earring">💎 Try Earrings</div>
+        </div>
+      </div>
+      
+      <div class="category">
+        <h2>Nose Rings</h2>
+        <div class="thumb">
+          <img src="https://images.unsplash.com/photo-1636207543865-f5585109d6b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Nose Ring" />
+          <div class="cambtn" data-img="https://images.unsplash.com/photo-1636207543865-f5585109d6b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-type="nosering">👃 Try Nose Ring</div>
+        </div>
+      </div>
+      
+      <div class="category">
+        <h2>Bangles</h2>
+        <div class="thumb">
+          <img src="https://images.unsplash.com/photo-1588444650700-6c7f0c89d36b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Gold Bangles" />
+          <div class="cambtn" data-img="https://images.unsplash.com/photo-1588444650700-6c7f0c89d36b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" data-type="bangle">💍 Try Bangles</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="arModal">
+      <div id="controls" style="display:none;">
+        <button id="closeBtn">✕ Close</button>
+        <button id="cameraToggle">📷 Switch Camera</button>
+        <label>
+          <input type="checkbox" id="mirrorToggle" checked /> Mirror
+        </label>
+        <div id="status">Initializing...</div>
+      </div>
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="output"></canvas>
+    </div>
+  </div>
+  
+  <div class="instructions">
+    <p><strong>How to use:</strong> Click on any "Try" button to see how the jewellery looks on you. Make sure to allow camera access when prompted.</p>
+  </div>
+
+  <!-- MediaPipe FaceMesh and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+  <script>
+    (() => {
+      const video = document.getElementById('video');
+      const canvas = document.getElementById('output');
+      const ctx = canvas.getContext('2d');
+      const controls = document.getElementById('controls');
+      const closeBtn = document.getElementById('closeBtn');
+      const mirrorToggle = document.getElementById('mirrorToggle');
+      const cameraToggle = document.getElementById('cameraToggle');
+      const status = document.getElementById('status');
+
+      let selectedOverlay = null;
+      let jewelleryType = null;
+      let overlayImage = new Image();
+      overlayImage.crossOrigin = "anonymous";
+
+      let cameraInstance = null;
+      let mpFaceMesh = null;
+      let mpPose = null;
+      let mpHands = null;
+      let currentFacingMode = 'user';
+      let isProcessing = false;
+
+      // Resize canvas to container size
+      function resizeCanvas() {
+        const r = document.getElementById('arModal').getBoundingClientRect();
+        canvas.width = r.width;
+        canvas.height = r.height;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // Update status message
+      function updateStatus(message) {
+        status.textContent = message;
+      }
+
+      // Stop current camera
+      function stopCamera() {
+        if (cameraInstance) {
+          cameraInstance.stop();
+          cameraInstance = null;
+        }
+        const stream = video.srcObject;
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+          video.srcObject = null;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        controls.style.display = 'none';
+        updateStatus("Camera stopped");
+      }
+
+      // Start AR camera and detection models
+      async function startCameraAndDetection() {
+        if (cameraInstance) return; // already running
+
+        updateStatus("Initializing camera...");
+
+        // Setup MediaPipe FaceMesh for face detection
+        mpFaceMesh = new FaceMesh({
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+        });
+        
+        mpFaceMesh.setOptions({
+          maxNumFaces: 1,
+          refineLandmarks: true,
+          minDetectionConfidence: 0.7,
+          minTrackingConfidence: 0.6
+        });
+        
+        mpFaceMesh.onResults(onFaceResults);
+
+        // Setup MediaPipe Pose for body detection
+        mpPose = new Pose({
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+        
+        mpPose.setOptions({
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        });
+        
+        mpPose.onResults(onPoseResults);
+
+        // Setup MediaPipe Hands for hand detection
+        mpHands = new Hands({
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        });
+        
+        mpHands.setOptions({
+          maxNumHands: 2,
+          modelComplexity: 1,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        });
+        
+        mpHands.onResults(onHandResults);
+
+        try {
+          const constraints = {
+            video: {
+              facingMode: currentFacingMode,
+              width: { ideal: 640 },
+              height: { ideal: 480 }
+            },
+            audio: false
+          };
+
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          video.srcObject = stream;
+          await video.play();
+
+          cameraInstance = new Camera(video, {
+            onFrame: async () => {
+              if (!isProcessing) {
+                isProcessing = true;
+                try {
+                  // Send frame to all detection models
+                  await Promise.all([
+                    mpFaceMesh.send({ image: video }),
+                    mpPose.send({ image: video }),
+                    mpHands.send({ image: video })
+                  ]);
+                } catch (error) {
+                  console.error("Error processing frame:", error);
+                } finally {
+                  isProcessing = false;
+                }
+              }
+            },
+            width: 640,
+            height: 480
+          });
+          
+          cameraInstance.start();
+          controls.style.display = 'flex';
+          updateStatus("Ready - Position yourself in frame");
+        } catch (error) {
+          console.error('Error accessing camera:', error);
+          updateStatus("Camera error: " + error.message);
+          alert('Error accessing camera: ' + error.message);
+        }
+      }
+
+      // Switch between front and back camera
+      async function switchCamera() {
+        updateStatus("Switching camera...");
+        stopCamera();
+        
+        // Toggle between front and back camera
+        currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+        
+        // Restart with new camera
+        await startCameraAndDetection();
+      }
+
+      // Convert normalized coords to canvas pixel coords
+      function toCanvasCoords(norm) {
+        return {
+          x: norm.x * canvas.width,
+          y: norm.y * canvas.height
+        };
+      }
+
+      // Handle FaceMesh results
+      function onFaceResults(results) {
+        if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+          return;
+        }
+
+        const landmarks = results.multiFaceLandmarks[0];
+        
+        // Draw jewellery based on type
+        if (jewelleryType === 'earring') {
+          drawEarrings(landmarks);
+        } else if (jewelleryType === 'nosering') {
+          drawNoseRing(landmarks);
+        }
+      }
+
+      // Handle Pose results
+      function onPoseResults(results) {
+        if (!results.poseLandmarks) {
+          return;
+        }
+
+        const landmarks = results.poseLandmarks;
+        
+        // Draw jewellery based on type
+        if (jewelleryType === 'necklace') {
+          drawNecklace(landmarks);
+        }
+      }
+
+      // Handle Hands results
+      function onHandResults(results) {
+        if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+          return;
+        }
+
+        const landmarks = results.multiHandLandmarks;
+        
+        // Draw jewellery based on type
+        if (jewelleryType === 'bangle') {
+          drawBangles(landmarks);
+        }
+      }
+
+      // Draw earrings on ears
+      function drawEarrings(landmarks) {
+        const leftEar = landmarks[234];  // Left ear landmark
+        const rightEar = landmarks[454]; // Right ear landmark
+        
+        const leftPos = toCanvasCoords(leftEar);
+        const rightPos = toCanvasCoords(rightEar);
+        
+        if (overlayImage.complete && overlayImage.naturalWidth !== 0) {
+          const size = Math.hypot(leftPos.x - rightPos.x, leftPos.y - rightPos.y) * 0.15;
+          
+          // Draw on left ear
+          ctx.drawImage(
+            overlayImage, 
+            leftPos.x - size/2, 
+            leftPos.y - size/2, 
+            size, 
+            size
+          );
+          
+          // Draw on right ear
+          ctx.drawImage(
+            overlayImage, 
+            rightPos.x - size/2, 
+            rightPos.y - size/2, 
+            size, 
+            size
+          );
+        }
+      }
+
+      // Draw necklace on neck
+      function drawNecklace(landmarks) {
+        // Use pose landmarks for neck positioning
+        const leftShoulder = landmarks[11];  // Left shoulder
+        const rightShoulder = landmarks[12]; // Right shoulder
+        const nose = landmarks[0];           // Nose
+        
+        const leftPos = toCanvasCoords(leftShoulder);
+        const rightPos = toCanvasCoords(rightShoulder);
+        const nosePos = toCanvasCoords(nose);
+        
+        if (overlayImage.complete && overlayImage.naturalWidth !== 0) {
+          const neckWidth = Math.hypot(leftPos.x - rightPos.x, leftPos.y - rightPos.y) * 0.8;
+          const neckHeight = neckWidth * (overlayImage.naturalHeight / overlayImage.naturalWidth);
+          const neckCenterX = (leftPos.x + rightPos.x) / 2;
+          const neckCenterY = (nosePos.y + (leftPos.y + rightPos.y) / 2) / 2;
+          
+          ctx.drawImage(
+            overlayImage, 
+            neckCenterX - neckWidth/2, 
+            neckCenterY - neckHeight/2, 
+            neckWidth, 
+            neckHeight
+          );
+        }
+      }
+
+      // Draw nose ring
+      function drawNoseRing(landmarks) {
+        const noseTip = landmarks[1];  // Nose tip
+        
+        const nosePos = toCanvasCoords(noseTip);
+        
+        if (overlayImage.complete && overlayImage.naturalWidth !== 0) {
+          const size = 40; // Fixed size for nose ring
+          
+          ctx.drawImage(
+            overlayImage, 
+            nosePos.x - size/2, 
+            nosePos.y - size/2, 
+            size, 
+            size
+          );
+        }
+      }
+
+      // Draw bangles on wrists
+      function drawBangles(landmarks) {
+        // For each detected hand
+        for (let hand of landmarks) {
+          const wrist = hand[0];  // Wrist landmark
+          
+          const wristPos = toCanvasCoords(wrist);
+          
+          if (overlayImage.complete && overlayImage.naturalWidth !== 0) {
+            const size = 60; // Fixed size for bangles
+            
+            ctx.drawImage(
+              overlayImage, 
+              wristPos.x - size/2, 
+              wristPos.y - size/2, 
+              size, 
+              size
+            );
+          }
+        }
+      }
+
+      // Main drawing function
+      function drawResults() {
+        resizeCanvas();
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const mirror = mirrorToggle.checked;
+
+        if (mirror && currentFacingMode === 'user') {
+          // Only mirror for front camera
+          ctx.translate(canvas.width, 0);
+          ctx.scale(-1, 1);
+        }
+
+        // Draw video frame as background
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        ctx.restore();
+      }
+
+      // Debug image load status
+      overlayImage.onload = () => {
+        console.log('Overlay image loaded:', overlayImage.src);
+        updateStatus("Jewellery loaded - Ready to try on");
+      };
+      
+      overlayImage.onerror = () => {
+        console.error('Overlay image failed to load:', overlayImage.src);
+        updateStatus("Error loading jewellery image");
+      };
+
+      // Handle clicking "Try" buttons
+      document.querySelectorAll('.cambtn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          selectedOverlay = btn.dataset.img;
+          jewelleryType = btn.dataset.type;
+          overlayImage.src = selectedOverlay;
+          await startCameraAndDetection();
+        });
+      });
+
+      // Close button
+      closeBtn.addEventListener('click', () => {
+        stopCamera();
+      });
+
+      // Camera toggle button
+      cameraToggle.addEventListener('click', () => {
+        switchCamera();
+      });
+
+      // Initialize with a default image
+      overlayImage.src = "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60";
+    })();
+  </script>
+</body>
+</html>
