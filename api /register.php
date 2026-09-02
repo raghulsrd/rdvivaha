@@ -38,28 +38,44 @@ if ($errors !== []) {
 }
 
 try {
-    $passwordHash = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
+    $pdo = db();
 
-    $stmt = db()->prepare(
+    // Email-க்கு UNIQUE index illa-na duplicate ஏறிடும், அதனால manual check
+    $check = $pdo->prepare(
+        'SELECT unique_member_id
+           FROM com_customer_phno_address_book
+          WHERE mailid = :mailid
+          LIMIT 1'
+    );
+    $check->execute([':mailid' => $data['email']]);
+
+    if ($check->fetch()) {
+        jsonResponse(409, [
+            'success' => false,
+            'message' => 'An account with this email already exists.',
+            'errors'  => ['email' => 'This email is already registered'],
+        ]);
+    }
+
+    $stmt = $pdo->prepare(
         'INSERT INTO com_customer_phno_address_book
-            (customername, phno_1, phno_2, mailid, address, password_hash)
-         VALUES (:customername, :phno_1, :phno_2, :mailid, :address, :password_hash)'
+            (customername, phno_1, phno_2, mailid, address)
+         VALUES (:customername, :phno_1, :phno_2, :mailid, :address)'
     );
 
     $stmt->execute([
-        ':customername'  => $data['customerName'],
-        ':phno_1'        => $data['phone1'],
-        ':phno_2'        => $data['phone2'],
-        ':mailid'        => $data['email'],
-        ':address'       => $data['address'],
-        ':password_hash' => $passwordHash,
+        ':customername' => $data['customerName'],
+        ':phno_1'       => $data['phone1'],
+        ':phno_2'       => $data['phone2'],
+        ':mailid'       => $data['email'],
+        ':address'      => $data['address'],
     ]);
 
     jsonResponse(201, [
         'success'  => true,
-        'message'  => 'Account created successfully.',
+        'message'  => 'Thank you! Your details have been registered.',
         'customer' => [
-            'id'    => (int) db()->lastInsertId(),
+            'id'    => (int) $pdo->lastInsertId(),
             'name'  => $data['customerName'],
             'email' => $data['email'],
         ],
