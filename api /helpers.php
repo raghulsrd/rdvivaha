@@ -36,45 +36,39 @@ function validateRegistration(array $body): array
 {
     $errors = [];
 
-    $firstName = trim((string) ($body['firstName'] ?? ''));
-    $lastName  = trim((string) ($body['lastName'] ?? ''));
-    $email     = strtolower(trim((string) ($body['email'] ?? '')));
-    $phone     = trim((string) ($body['phone'] ?? ''));
-    $password  = (string) ($body['password'] ?? '');
-    $confirm   = (string) ($body['confirmPassword'] ?? '');
+    $customerName = trim((string) ($body['customerName'] ?? ''));
+    $phone1       = trim((string) ($body['phone1'] ?? ''));
+    $phone2       = trim((string) ($body['phone2'] ?? ''));
+    $email        = strtolower(trim((string) ($body['email'] ?? '')));
+    $address      = trim((string) ($body['address'] ?? ''));
 
-    if (mb_strlen($firstName) < 2) {
-        $errors['firstName'] = 'Enter your first name';
+    if (mb_strlen($customerName) < 3) {
+        $errors['customerName'] = 'Enter your full name';
     }
-    if ($lastName === '') {
-        $errors['lastName'] = 'Enter your last name';
+    if (!preg_match('/^[0-9+\-\s]{10,20}$/', $phone1)) {
+        $errors['phone1'] = 'Enter a valid phone number';
+    }
+    if ($phone2 !== '' && !preg_match('/^[0-9+\-\s]{10,20}$/', $phone2)) {
+        $errors['phone2'] = 'Enter a valid alternate phone number';
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 191) {
         $errors['email'] = 'Enter a valid email address';
     }
-    if ($phone !== '' && !preg_match('/^[0-9+\-\s]{7,20}$/', $phone)) {
-        $errors['phone'] = 'Enter a valid phone number';
-    }
-    if (mb_strlen($password) < 8) {
-        $errors['password'] = 'Password must be at least 8 characters';
-    }
-    if ($password !== $confirm) {
-        $errors['confirmPassword'] = 'Passwords do not match';
+    if (mb_strlen($address) < 10) {
+        $errors['address'] = 'Enter your complete address';
     }
 
     return [
         'errors' => $errors,
         'data'   => [
-            'firstName'        => $firstName,
-            'lastName'         => $lastName,
-            'email'            => $email,
-            'phone'            => $phone !== '' ? $phone : null,
-            'password'         => $password,
-            'acceptsMarketing' => !empty($body['acceptsMarketing']) ? 1 : 0,
+            'customerName' => $customerName,
+            'phone1'       => $phone1,
+            'phone2'       => $phone2 !== '' ? $phone2 : null,
+            'email'        => $email,
+            'address'      => $address,
         ],
     ];
 }
-
 /**
  * ஒரே IP-லிருந்து அதிக attempts-ஐ தடுக்குற simple file-based throttle.
  */
