@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Join Us | RD VIVAHA</title>
+  <link rel="icon" type="image/png" href="images/files-6d.jpg">
+
+  <link href="css/assets-theme.css" rel="stylesheet" media="all">
+  <link href="css/assets-base.css" rel="stylesheet" media="all">
+  <link href="css/assets-header.css" rel="stylesheet" media="all">
+  <link href="css/assets-footer.css" rel="stylesheet" media="all">
+  <link href="css/assets-register.css" rel="stylesheet" media="all">
+</head>
+
+<body class="animation-on">
+<div class="body-wrapper">
+
+  <!-- index.html-லிருந்து header markup-ஐ இங்க copy-paste பண்ணு -->
+
+  <main id="MainContent" class="content-for-layout" role="main" tabindex="-1">
+    <section class="section-wrapper primary-color-scheme register-section">
+      <div class="container-xs">
+
+        <div class="section-heading-box text-center">
+          <h2 class="section-heading-title h2">Join Us</h2>
+          <p class="register__subtitle">
+            Create your RD VIVAHA account for faster checkout, order tracking
+            and early access to new collections.
+          </p>
+        </div>
+
+        <div class="register__card">
+          <div class="register__alert" id="formAlert" role="alert" hidden></div>
+
+       <form id="registerForm" class="register__form" novalidate>
+
+  <div class="register__field">
+    <label for="customerName">Full name *</label>
+    <input type="text" id="customerName" name="customerName"
+           class="form-control" autocomplete="name" required>
+    <small class="register__error" data-error-for="customerName"></small>
+  </div>
+
+  <div class="register__field">
+    <label for="email">Email address *</label>
+    <input type="email" id="email" name="email"
+           class="form-control" autocomplete="email" required>
+    <small class="register__error" data-error-for="email"></small>
+  </div>
+
+  <div class="register__row">
+    <div class="register__field">
+      <label for="phone1">Phone number *</label>
+      <input type="tel" id="phone1" name="phone1"
+             class="form-control" autocomplete="tel" required>
+      <small class="register__error" data-error-for="phone1"></small>
+    </div>
+
+    <div class="register__field">
+      <label for="phone2">Alternate phone</label>
+      <input type="tel" id="phone2" name="phone2" class="form-control">
+      <small class="register__error" data-error-for="phone2"></small>
+    </div>
+  </div>
+
+  <div class="register__field">
+    <label for="address">Address *</label>
+    <textarea id="address" name="address" class="form-control"
+              rows="3" autocomplete="street-address" required></textarea>
+    <small class="register__error" data-error-for="address"></small>
+  </div>
+
+  <button type="submit" id="submitBtn" class="button med-btn style1 btn-block">
+    <span class="btn-label">Register</span>
+  </button>
+</form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- index.html-லிருந்து footer markup-ஐ இங்க copy-paste பண்ணு -->
+
+</div>
+
+<script src="js/assets-jquery.min.js" defer></script>
+<script src="js/assets-theme.js" defer></script>
+<script src="js/assets-register.js" defer></script>
+</body>
+</html>
