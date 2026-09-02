@@ -12,13 +12,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     jsonResponse(405, ['success' => false, 'message' => 'Method not allowed.']);
 }
 
-// ---- Rate limit ----
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 if (!throttle('register:' . $ip)) {
     jsonResponse(429, ['success' => false, 'message' => 'Too many attempts. Try again later.']);
 }
 
-// ---- Input parse ----
 $raw = file_get_contents('php://input');
 if ($raw === false || strlen($raw) > 10000) {
     jsonResponse(400, ['success' => false, 'message' => 'Invalid request.']);
@@ -29,7 +27,6 @@ if (!is_array($body)) {
     jsonResponse(400, ['success' => false, 'message' => 'Invalid JSON payload.']);
 }
 
-// ---- Validate ----
 ['errors' => $errors, 'data' => $data] = validateRegistration($body);
 
 if ($errors !== []) {
@@ -40,36 +37,34 @@ if ($errors !== []) {
     ]);
 }
 
-// ---- Insert ----
 try {
     $passwordHash = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 
     $stmt = db()->prepare(
-        'INSERT INTO customers
-            (first_name, last_name, email, phone, password_hash, accepts_marketing)
-         VALUES (:first_name, :last_name, :email, :phone, :password_hash, :accepts_marketing)'
+        'INSERT INTO com_customer_phno_address_book
+            (customername, phno_1, phno_2, mailid, address, password_hash)
+         VALUES (:customername, :phno_1, :phno_2, :mailid, :address, :password_hash)'
     );
 
     $stmt->execute([
-        ':first_name'        => $data['firstName'],
-        ':last_name'         => $data['lastName'],
-        ':email'             => $data['email'],
-        ':phone'             => $data['phone'],
-        ':password_hash'     => $passwordHash,
-        ':accepts_marketing' => $data['acceptsMarketing'],
+        ':customername'  => $data['customerName'],
+        ':phno_1'        => $data['phone1'],
+        ':phno_2'        => $data['phone2'],
+        ':mailid'        => $data['email'],
+        ':address'       => $data['address'],
+        ':password_hash' => $passwordHash,
     ]);
 
     jsonResponse(201, [
         'success'  => true,
         'message'  => 'Account created successfully.',
         'customer' => [
-            'id'        => (int) db()->lastInsertId(),
-            'firstName' => $data['firstName'],
-            'email'     => $data['email'],
+            'id'    => (int) db()->lastInsertId(),
+            'name'  => $data['customerName'],
+            'email' => $data['email'],
         ],
     ]);
 } catch (PDOException $e) {
-    // 23000 = integrity constraint violation, 1062 = duplicate entry
     if ($e->getCode() === '23000') {
         jsonResponse(409, [
             'success' => false,
