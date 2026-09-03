@@ -1,245 +1,333 @@
 /* ==========================================================================
-   Register / Join Us page
-   Theme-ஓட CSS variables use பண்ணுது, அதனால color scheme தானா match ஆகும்
+   Join Us — luxury jewellery register form
+   Theme variables-ஐ சார்ந்து இல்ல, சொந்த palette
    ========================================================================== */
 
 .register-section {
-  padding-top: 90px;
-  padding-bottom: 90px;
-  background: var(--gradiant-bg);
+  --rg-ink:        #1a1512;   /* deep charcoal */
+  --rg-ink-soft:   #6b5f57;
+  --rg-gold:       #b8934f;   /* champagne gold */
+  --rg-gold-deep:  #8f6f33;
+  --rg-gold-mist:  rgba(184, 147, 79, 0.14);
+  --rg-line:       #ddd2c4;   /* warm border */
+  --rg-ivory:      #fdfbf7;
+  --rg-card:       #ffffff;
+
+  position: relative;
+  padding: 110px 0 120px;
+  background:
+    radial-gradient(1100px 480px at 50% -8%, #f6efe4 0%, transparent 62%),
+    linear-gradient(180deg, #fdfbf7 0%, #f7f2ea 55%, #f1e9dd 100%);
+  overflow: hidden;
 }
 
-/* --- Heading --------------------------------------------------------- */
+/* மேலயும் கீழயும் மெல்லிய gold hairline */
+.register-section::before,
+.register-section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rg-gold), transparent);
+  opacity: 0.5;
+}
+.register-section::before { top: 0; }
+.register-section::after  { bottom: 0; }
+
+/* --- Heading ---------------------------------------------------------- */
 
 .register-section .section-heading-box {
-  margin-bottom: 40px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.register-section .section-heading-title {
+  position: relative;
+  margin: 0;
+  padding-bottom: 22px;
+  color: var(--rg-ink);
+  font-family: var(--heading-font-family, "Playfair Display", serif);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* Heading-க்கு கீழ diamond ornament */
+.register-section .section-heading-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: var(--rg-gold);
+  transform: rotate(45deg);
+}
+
+.register-section .section-heading-title::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 7.5px;
+  width: 150px;
+  margin-left: -75px;
+  border-top: 1px solid var(--rg-line);
 }
 
 .register__subtitle {
-  max-width: 520px;
-  margin: 14px auto 0;
-  color: var(--body-text-color-light);
-  font-size: var(--text);
-  line-height: var(--body-font-line-height);
+  max-width: 460px;
+  margin: 20px auto 0;
+  color: var(--rg-ink-soft);
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: 0.2px;
 }
 
-/* --- Card ------------------------------------------------------------ */
+/* --- Card ------------------------------------------------------------- */
 
 .register__card {
-  max-width: 620px;
+  position: relative;
+  max-width: 640px;
   margin: 0 auto;
-  padding: 44px;
-  background: var(--body-bg);
-  border: 1px solid var(--divider-color);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  padding: 54px 56px 48px;
+  background: var(--rg-card);
+  border: 1px solid var(--rg-line);
+  box-shadow:
+    0 1px 2px rgba(26, 21, 18, 0.04),
+    0 24px 60px -24px rgba(26, 21, 18, 0.18);
 }
 
-/* --- Layout ---------------------------------------------------------- */
+/* Card-ஓட மேல gold accent bar */
+.register__card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--rg-gold-deep), #e3c98d 42%, var(--rg-gold-deep));
+}
+
+/* உள்ளே inset frame — jewellery box feel */
+.register__card::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(184, 147, 79, 0.18);
+  pointer-events: none;
+}
+
+.register__form {
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Layout ----------------------------------------------------------- */
 
 .register__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 20px;
+  gap: 0 24px;
 }
 
 .register__field {
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 
-/* --- Labels ---------------------------------------------------------- */
+/* --- Labels ----------------------------------------------------------- */
 
-.register__field label {
+.register-section .register__field label {
   display: block;
-  margin-bottom: 8px;
-  font-family: var(--body-font-family);
-  font-size: var(--small-text);
+  margin-bottom: 10px;
+  color: var(--rg-ink-soft);
+  font-family: var(--body-font-family, Roboto, sans-serif);
+  font-size: 11px;
   font-weight: 500;
-  color: var(--body-text-color);
-  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
 }
 
-/* --- Inputs ---------------------------------------------------------- */
+.register__required {
+  color: var(--rg-gold);
+  margin-left: 3px;
+}
 
-.register__field .form-control {
+/* --- Inputs (underline style) ----------------------------------------- */
+
+.register-section .register__field .form-control {
   display: block;
   width: 100%;
-  padding: 13px 16px;
-  background: var(--form-input-bg);
-  color: var(--form-input-color);
-  border: 1px solid var(--divider-color);
-  border-radius: var(--input-radius);
-  font-family: var(--body-font-family);
-  font-size: var(--text);
-  line-height: 1.4;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  padding: 11px 2px 12px;
+  background: transparent;
+  color: var(--rg-ink);
+  border: 0;
+  border-bottom: 1px solid var(--rg-line);
+  border-radius: 0;
+  box-shadow: none;
+  font-family: var(--body-font-family, Roboto, sans-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+  transition: border-color 0.35s ease, background-color 0.35s ease;
   -webkit-appearance: none;
   appearance: none;
 }
 
-.register__field .form-control::placeholder {
-  color: var(--body-text-color-xlight);
+.register-section .register__field .form-control::placeholder {
+  color: #b9aa9c;
 }
 
-.register__field .form-control:hover {
-  border-color: var(--body-text-color-light);
+.register-section .register__field .form-control:hover {
+  border-bottom-color: var(--rg-gold);
 }
 
-.register__field .form-control:focus {
+.register-section .register__field .form-control:focus {
   outline: none;
-  border-color: var(--form-input-border);
-  box-shadow: 0 0 0 3px var(--link-bg-color);
+  border-bottom-color: var(--rg-gold-deep);
+  border-bottom-width: 2px;
+  padding-bottom: 11px;
+  background: var(--rg-gold-mist);
 }
 
-.register__field textarea.form-control {
-  min-height: 96px;
+.register-section .register__field textarea.form-control {
+  min-height: 92px;
   resize: vertical;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-/* Chrome autofill-ஓட மஞ்சள் background-ஐ நீக்குது */
-.register__field .form-control:-webkit-autofill,
-.register__field .form-control:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--form-input-color);
-  -webkit-box-shadow: 0 0 0 1000px var(--form-input-bg) inset;
+/* Chrome autofill-ஓட நீல/மஞ்சள் background-ஐ மறைக்குது */
+.register-section .register__field .form-control:-webkit-autofill,
+.register-section .register__field .form-control:-webkit-autofill:hover,
+.register-section .register__field .form-control:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--rg-ink);
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+  caret-color: var(--rg-ink);
 }
 
-/* --- Validation states ----------------------------------------------- */
+/* --- Validation ------------------------------------------------------- */
 
-.register__field .form-control.is-invalid {
-  border-color: var(--error-color);
+.register-section .register__field .form-control.is-invalid {
+  border-bottom-color: #c0483c;
 }
 
-.register__field .form-control.is-invalid:focus {
-  box-shadow: 0 0 0 3px var(--error-bg-color);
-}
-
-.register__hint {
-  display: block;
-  margin-top: 6px;
-  font-size: var(--xsmall-text);
-  color: var(--body-text-color-light);
+.register-section .register__field .form-control.is-invalid:focus {
+  background: rgba(192, 72, 60, 0.06);
 }
 
 .register__error {
   display: none;
-  margin-top: 6px;
-  font-size: var(--xsmall-text);
-  line-height: 1.4;
-  color: var(--error-color);
+  margin-top: 8px;
+  color: #c0483c;
+  font-size: 12px;
+  letter-spacing: 0.2px;
 }
 
-.register__error.show {
-  display: block;
-}
+.register__error.show { display: block; }
 
-/* --- Alert box ------------------------------------------------------- */
+/* --- Alert ------------------------------------------------------------ */
 
 .register__alert {
-  padding: 14px 18px;
-  margin-bottom: 26px;
-  border-radius: var(--border-radius);
-  font-size: var(--small-text);
-  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+  padding: 15px 18px;
+  margin-bottom: 30px;
+  font-size: 14px;
+  line-height: 1.55;
+  border-left: 3px solid;
 }
 
 .register__alert.is-error {
-  background: var(--error-bg-color);
-  color: var(--error-color);
-  border: 1px solid var(--error-color);
+  background: #fbf0ee;
+  border-left-color: #c0483c;
+  color: #96382e;
 }
 
 .register__alert.is-success {
-  background: var(--success-bg-color);
-  color: var(--success-color);
-  border: 1px solid var(--success-color);
+  background: #f0f6f1;
+  border-left-color: #4a7c59;
+  color: #35603f;
 }
 
-/* --- Required marker ------------------------------------------------- */
+/* --- Submit button ---------------------------------------------------- */
 
-.register__field label::after {
-  content: "";
-}
-
-.register__required {
-  color: var(--error-color);
-  margin-left: 2px;
-}
-
-/* --- Submit button --------------------------------------------------- */
-
-.register__form .btn-block {
+.register-section .register__form #submitBtn {
+  position: relative;
+  display: block;
   width: 100%;
-  margin-top: 6px;
-  justify-content: center;
+  margin-top: 12px;
+  padding: 18px 24px;
+  background: var(--rg-ink);
+  color: #fff;
+  border: 1px solid var(--rg-ink);
+  border-radius: 0;
+  overflow: hidden;
+  font-family: var(--body-font-family, Roboto, sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2.4px;
+  cursor: pointer;
+  transition: color 0.4s ease, border-color 0.4s ease;
 }
 
-.register__form #submitBtn[disabled] {
-  opacity: 0.6;
+/* Hover-ல gold இடமிருந்து வலமா நிரப்புது */
+.register-section .register__form #submitBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--rg-gold-deep), #cba75f);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.register-section .register__form #submitBtn:hover::before { transform: scaleX(1); }
+
+.register-section .register__form #submitBtn:hover {
+  color: #1a1512;
+  border-color: var(--rg-gold-deep);
+}
+
+.register-section .register__form #submitBtn .btn-label {
+  position: relative;
+  z-index: 1;
+}
+
+.register-section .register__form #submitBtn[disabled] {
+  opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-/* --- Footer link ----------------------------------------------------- */
-
-.register__login-link {
-  margin-top: 24px;
-  margin-bottom: 0;
-  text-align: center;
-  font-size: var(--small-text);
-  color: var(--body-text-color-light);
-}
-
-.register__login-link .hyperlink {
-  color: var(--link-color);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.register__login-link .hyperlink:hover {
-  color: var(--link-hover-color);
-}
-
-/* --- Responsive ------------------------------------------------------ */
+/* --- Responsive ------------------------------------------------------- */
 
 @media (max-width: 991px) {
-  .register-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
-  }
-
-  .register__card {
-    padding: 34px;
-  }
+  .register-section { padding: 70px 0 80px; }
+  .register__card   { padding: 42px 36px 38px; }
 }
 
 @media (max-width: 767px) {
-  .register-section {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
+  .register-section { padding: 48px 0 56px; }
 
   .register__card {
-    padding: 24px 20px;
-    box-shadow: none;
+    padding: 32px 22px 30px;
+    box-shadow: 0 12px 32px -18px rgba(26, 21, 18, 0.22);
   }
+
+  .register__card::after { inset: 8px; }
 
   .register__row {
     grid-template-columns: 1fr;
     gap: 0;
   }
 
-  .register__field {
-    margin-bottom: 18px;
-  }
+  .register__field  { margin-bottom: 22px; }
+  .register__subtitle { font-size: 14px; }
 
-  /* iOS-ல 16px-க்கு கீழ இருந்தா input focus பண்ணும்போது zoom ஆகும் */
-  .register__field .form-control {
-    font-size: 16px;
-    padding: 12px 14px;
-  }
-
-  .register-section .section-heading-box {
-    margin-bottom: 26px;
+  .register-section .register__form #submitBtn {
+    padding: 16px 20px;
+    letter-spacing: 1.8px;
   }
 }
