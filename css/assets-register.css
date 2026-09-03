@@ -1,0 +1,245 @@
+/* ==========================================================================
+   Register / Join Us page
+   Theme-ஓட CSS variables use பண்ணுது, அதனால color scheme தானா match ஆகும்
+   ========================================================================== */
+
+.register-section {
+  padding-top: 90px;
+  padding-bottom: 90px;
+  background: var(--gradiant-bg);
+}
+
+/* --- Heading --------------------------------------------------------- */
+
+.register-section .section-heading-box {
+  margin-bottom: 40px;
+}
+
+.register__subtitle {
+  max-width: 520px;
+  margin: 14px auto 0;
+  color: var(--body-text-color-light);
+  font-size: var(--text);
+  line-height: var(--body-font-line-height);
+}
+
+/* --- Card ------------------------------------------------------------ */
+
+.register__card {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 44px;
+  background: var(--body-bg);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+/* --- Layout ---------------------------------------------------------- */
+
+.register__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+.register__field {
+  margin-bottom: 22px;
+}
+
+/* --- Labels ---------------------------------------------------------- */
+
+.register__field label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--body-font-family);
+  font-size: var(--small-text);
+  font-weight: 500;
+  color: var(--body-text-color);
+  letter-spacing: 0.2px;
+}
+
+/* --- Inputs ---------------------------------------------------------- */
+
+.register__field .form-control {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  background: var(--form-input-bg);
+  color: var(--form-input-color);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--input-radius);
+  font-family: var(--body-font-family);
+  font-size: var(--text);
+  line-height: 1.4;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.register__field .form-control::placeholder {
+  color: var(--body-text-color-xlight);
+}
+
+.register__field .form-control:hover {
+  border-color: var(--body-text-color-light);
+}
+
+.register__field .form-control:focus {
+  outline: none;
+  border-color: var(--form-input-border);
+  box-shadow: 0 0 0 3px var(--link-bg-color);
+}
+
+.register__field textarea.form-control {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* Chrome autofill-ஓட மஞ்சள் background-ஐ நீக்குது */
+.register__field .form-control:-webkit-autofill,
+.register__field .form-control:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--form-input-color);
+  -webkit-box-shadow: 0 0 0 1000px var(--form-input-bg) inset;
+}
+
+/* --- Validation states ----------------------------------------------- */
+
+.register__field .form-control.is-invalid {
+  border-color: var(--error-color);
+}
+
+.register__field .form-control.is-invalid:focus {
+  box-shadow: 0 0 0 3px var(--error-bg-color);
+}
+
+.register__hint {
+  display: block;
+  margin-top: 6px;
+  font-size: var(--xsmall-text);
+  color: var(--body-text-color-light);
+}
+
+.register__error {
+  display: none;
+  margin-top: 6px;
+  font-size: var(--xsmall-text);
+  line-height: 1.4;
+  color: var(--error-color);
+}
+
+.register__error.show {
+  display: block;
+}
+
+/* --- Alert box ------------------------------------------------------- */
+
+.register__alert {
+  padding: 14px 18px;
+  margin-bottom: 26px;
+  border-radius: var(--border-radius);
+  font-size: var(--small-text);
+  line-height: 1.5;
+}
+
+.register__alert.is-error {
+  background: var(--error-bg-color);
+  color: var(--error-color);
+  border: 1px solid var(--error-color);
+}
+
+.register__alert.is-success {
+  background: var(--success-bg-color);
+  color: var(--success-color);
+  border: 1px solid var(--success-color);
+}
+
+/* --- Required marker ------------------------------------------------- */
+
+.register__field label::after {
+  content: "";
+}
+
+.register__required {
+  color: var(--error-color);
+  margin-left: 2px;
+}
+
+/* --- Submit button --------------------------------------------------- */
+
+.register__form .btn-block {
+  width: 100%;
+  margin-top: 6px;
+  justify-content: center;
+}
+
+.register__form #submitBtn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --- Footer link ----------------------------------------------------- */
+
+.register__login-link {
+  margin-top: 24px;
+  margin-bottom: 0;
+  text-align: center;
+  font-size: var(--small-text);
+  color: var(--body-text-color-light);
+}
+
+.register__login-link .hyperlink {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.register__login-link .hyperlink:hover {
+  color: var(--link-hover-color);
+}
+
+/* --- Responsive ------------------------------------------------------ */
+
+@media (max-width: 991px) {
+  .register-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .register__card {
+    padding: 34px;
+  }
+}
+
+@media (max-width: 767px) {
+  .register-section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .register__card {
+    padding: 24px 20px;
+    box-shadow: none;
+  }
+
+  .register__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .register__field {
+    margin-bottom: 18px;
+  }
+
+  /* iOS-ல 16px-க்கு கீழ இருந்தா input focus பண்ணும்போது zoom ஆகும் */
+  .register__field .form-control {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .register-section .section-heading-box {
+    margin-bottom: 26px;
+  }
+}
