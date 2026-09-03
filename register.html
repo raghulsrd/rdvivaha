@@ -25,68 +25,79 @@
 
   <!-- index.html-லிருந்து header markup-ஐ இங்க copy-paste பண்ணு -->
 
-  <main id="MainContent" class="content-for-layout" role="main" tabindex="-1">
-    <section class="section-wrapper primary-color-scheme register-section">
-      <div class="container-xs">
+<main id="MainContent" class="content-for-layout" role="main" tabindex="-1">
 
-      <div class="section-heading-box text-center">
-        <h2 class="section-heading-title h2">Join Us</h2>
-        <p class="register__subtitle">
-          Share your details with us for order updates, new collection
-          announcements and exclusive offers.
-        </p>
-      </div>
-
-        <div class="register__card">
-          <div class="register__alert" id="formAlert" role="alert" hidden></div>
-
-       <form id="registerForm" class="register__form" novalidate>
-
-  <div class="register__field">
-    <label for="customerName">Full name <span class="register__required">*</span></label>
-    <input type="text" id="customerName" name="customerName"
-           class="form-control" autocomplete="name" required>
-    <small class="register__error" data-error-for="customerName"></small>
-  </div>
-
-  <div class="register__field">
-    <label for="email">Email address *</label>
-    <input type="email" id="email" name="email"
-           class="form-control" autocomplete="email" required>
-    <small class="register__error" data-error-for="email"></small>
-  </div>
-
-  <div class="register__row">
-    <div class="register__field">
-      <label for="phone1">Phone number *</label>
-      <input type="tel" id="phone1" name="phone1"
-             class="form-control" autocomplete="tel" required>
-      <small class="register__error" data-error-for="phone1"></small>
+  <!-- Hero banner -->
+  <section class="register-hero">
+    <div class="register-hero__media">
+      <img src="images/files-media_2.jpg" alt="" loading="eager">
     </div>
-
-    <div class="register__field">
-      <label for="phone2">Alternate phone</label>
-      <input type="tel" id="phone2" name="phone2" class="form-control">
-      <small class="register__error" data-error-for="phone2"></small>
+    <div class="register-hero__overlay"></div>
+    <div class="container">
+      <h1 class="register-hero__title">Join Us</h1>
     </div>
-  </div>
+  </section>
 
-  <div class="register__field">
-    <label for="address">Address *</label>
-    <textarea id="address" name="address" class="form-control"
-              rows="3" autocomplete="street-address" required></textarea>
-    <small class="register__error" data-error-for="address"></small>
-  </div>
+  <!-- Form -->
+  <section class="register-section">
+    <div class="container">
+      <div class="register__inner">
 
-  <button type="submit" id="submitBtn" class="button med-btn style1 btn-block">
-    <span class="btn-label">Register</span>
-  </button>
-</form>
-        </div>
+        <h6 class="register__eyebrow">Become a member</h6>
 
+        <div class="register__alert" id="formAlert" role="alert" hidden></div>
+
+        <form id="registerForm" class="register__form" novalidate>
+
+          <div class="register__field">
+            <input type="text" id="customerName" name="customerName"
+                   class="form-control" placeholder="Full name"
+                   autocomplete="name" required>
+            <small class="register__error" data-error-for="customerName"></small>
+          </div>
+
+          <div class="register__field">
+            <input type="email" id="email" name="email"
+                   class="form-control" placeholder="Email"
+                   autocomplete="email" required>
+            <small class="register__error" data-error-for="email"></small>
+          </div>
+
+          <div class="register__field">
+            <input type="tel" id="phone1" name="phone1"
+                   class="form-control" placeholder="Phone number"
+                   autocomplete="tel" required>
+            <small class="register__error" data-error-for="phone1"></small>
+          </div>
+
+          <div class="register__field">
+            <input type="tel" id="phone2" name="phone2"
+                   class="form-control" placeholder="Alternate phone (optional)">
+            <small class="register__error" data-error-for="phone2"></small>
+          </div>
+
+          <div class="register__field">
+            <textarea id="address" name="address" class="form-control"
+                      placeholder="Address" rows="4"
+                      autocomplete="street-address" required></textarea>
+            <small class="register__error" data-error-for="address"></small>
+          </div>
+
+          <button type="submit" id="submitBtn">
+            <span class="btn-label">Register</span>
+            <span class="btn-arrow" aria-hidden="true">
+              <svg viewBox="0 0 100 100" fill="none">
+                <path d="M98.23 53.23c.46-.92.62-2 .62-3.08v-.3c0-1.08-.16-2.16-.62-3.08-.31-.92-.92-1.54-1.54-2.3 0-.16-.15-.31-.3-.47L56.14 3.46a12.2 12.2 0 0 0-12.29 0 8.69 8.69 0 0 0 0 12.29l25.5 25.5H9.6a8.6 8.6 0 1 0 0 17.2h59.75l-25.5 25.5a8.69 8.69 0 0 0 0 12.29 8.66 8.66 0 0 0 12.29 0l40.25-40.25s.15-.3.3-.46c.62-.61 1.08-1.38 1.54-2.3Z" fill="currentColor"/>
+              </svg>
+            </span>
+          </button>
+
+        </form>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+</main>
 
   <!-- index.html-லிருந்து footer markup-ஐ இங்க copy-paste பண்ணு -->
 
