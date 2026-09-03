@@ -11,6 +11,13 @@
   <link href="css/assets-header.css" rel="stylesheet" media="all">
   <link href="css/assets-footer.css" rel="stylesheet" media="all">
   <link href="css/assets-register.css" rel="stylesheet" media="all">
+
+  
+    <link href="css/assets-theme.css" rel="stylesheet" media="all">
+    <link href="css/assets-base.css" rel="stylesheet" media="all">
+    <link href="css/assets-header.css" rel="stylesheet" media="all">
+    <link href="css/assets-footer.css" rel="stylesheet" media="all">
+    <link href="css/assets-register.css" rel="stylesheet" media="all">
 </head>
 
 <body class="animation-on">
@@ -36,7 +43,7 @@
        <form id="registerForm" class="register__form" novalidate>
 
   <div class="register__field">
-    <label for="customerName">Full name *</label>
+    <label for="customerName">Full name <span class="register__required">*</span></label>
     <input type="text" id="customerName" name="customerName"
            class="form-control" autocomplete="name" required>
     <small class="register__error" data-error-for="customerName"></small>
