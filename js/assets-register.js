@@ -113,79 +113,74 @@
     setLoading(true);
 
     fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(function (response) {
-      return response.text().then(function (text) {
-        var data;
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+})
+.then(function (res) {
 
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          throw new Error('Invalid response from server: ' + text);
-        }
+  console.log('HTTP STATUS:', res.status);
 
-        return {
-          httpStatus: response.status,
-          data: data
-        };
-      });
-    })
-    .then(function (result) {
-      setLoading(false);
+  return res.text().then(function (text) {
 
-      var data = result.data;
+    console.log('RAW SERVER RESPONSE:', text);
 
-      if (data.status === 1 || data.success === true) {
-        showAlert(
-          data.message || 'Registration successful',
-          'success'
-        );
+    var data;
 
-        form.reset();
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      throw new Error('Server returned invalid JSON: ' + text);
+    }
 
-        setTimeout(function () {
-          window.location.href = 'index.html';
-        }, 2500);
-
-        return;
-      }
-
-      if (data.field) {
-        showFieldError(
-          data.field,
-          data.message || 'Please check this field'
-        );
-        return;
-      }
-
-      if (data.errors) {
-        Object.keys(data.errors).forEach(function (field) {
-          showFieldError(field, data.errors[field]);
-        });
-
-        return;
-      }
-
-      showAlert(
-        data.message || 'Registration failed',
-        'error'
-      );
-    })
-    .catch(function (error) {
-      setLoading(false);
-
-      console.error('Registration API Error:', error);
-
-      showAlert(
-        'Could not reach the server. Please try again.',
-        'error'
-      );
-    });
+    return data;
   });
-})();
-```
+})
+.then(function (data) {
+
+  setLoading(false);
+
+  console.log('API RESPONSE:', data);
+
+  if (data.status === 1) {
+
+    showAlert(
+      data.message || 'Registration successful',
+      'success'
+    );
+
+    form.reset();
+
+    setTimeout(function () {
+      window.location.href = 'index.html';
+    }, 2500);
+
+    return;
+  }
+
+  if (data.field) {
+    showFieldError(
+      data.field,
+      data.message
+    );
+    return;
+  }
+
+  showAlert(
+    data.message || 'Registration failed',
+    'error'
+  );
+})
+.catch(function (error) {
+
+  setLoading(false);
+
+  console.error('REGISTER ERROR:', error);
+
+  showAlert(
+    error.message,
+    'error'
+  );
+});
