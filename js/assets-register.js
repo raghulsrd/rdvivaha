@@ -87,10 +87,7 @@ console.log('FINAL POST BODY:',payload.toString());
 
 fetch(API_URL,{
 method:'POST',
-headers:{
-'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
-},
-body:payload.toString()
+body:payload
 })
 .then(function(res){
 return res.text();
