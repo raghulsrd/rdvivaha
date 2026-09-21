@@ -76,19 +76,18 @@ if(address===''){
 showFieldError('address','Address is required');
 return;
 }
-var payload=new URLSearchParams();
+var payload=new FormData();
 payload.append('customerName',customerName);
 payload.append('email',email);
 payload.append('phone1',phone1);
 payload.append('phone2',phone2);
 payload.append('address',address);
+
 setLoading(true);
+
 fetch(API_URL,{
 method:'POST',
-headers:{
-'Content-Type':'application/x-www-form-urlencoded'
-},
-body:payload.toString()
+body:payload
 })
 .then(function(res){
 console.log('HTTP STATUS:',res.status);
