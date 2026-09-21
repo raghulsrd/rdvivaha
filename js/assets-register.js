@@ -83,7 +83,7 @@ payload.append('phone1',phone1);
 payload.append('phone2',phone2);
 payload.append('address',address);
 
-console.log('SENDING:',payload.toString());
+console.log('FINAL POST BODY:',payload.toString());
 
 fetch(API_URL,{
 method:'POST',
@@ -96,11 +96,7 @@ body:payload.toString()
 return res.text();
 })
 .then(function(text){
-console.log('SERVER:',text);
-alert(text);
-})
-.catch(function(error){
-console.error(error);
+console.log('SERVER RESPONSE:',text);
 });
 });
 })();
