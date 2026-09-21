@@ -76,53 +76,31 @@ if(address===''){
 showFieldError('address','Address is required');
 return;
 }
-var payload=new FormData();
+var payload=new URLSearchParams();
 payload.append('customerName',customerName);
 payload.append('email',email);
 payload.append('phone1',phone1);
 payload.append('phone2',phone2);
 payload.append('address',address);
 
-setLoading(true);
+console.log('SENDING:',payload.toString());
 
 fetch(API_URL,{
 method:'POST',
-body:payload
+headers:{
+'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+},
+body:payload.toString()
 })
 .then(function(res){
-console.log('HTTP STATUS:',res.status);
-return res.text().then(function(text){
-console.log('RAW SERVER RESPONSE:',text);
-var data;
-try{
-data=JSON.parse(text);
-}catch(e){
-throw new Error('Server returned invalid JSON: '+text);
-}
-return data;
-});
+return res.text();
 })
-.then(function(data){
-setLoading(false);
-console.log('API RESPONSE:',data);
-if(data.status===1){
-showAlert(data.message||'Registration successful','success');
-form.reset();
-setTimeout(function(){
-window.location.href='index.html';
-},2500);
-return;
-}
-if(data.field){
-showFieldError(data.field,data.message);
-return;
-}
-showAlert(data.message||'Registration failed','error');
+.then(function(text){
+console.log('SERVER:',text);
+alert(text);
 })
 .catch(function(error){
-setLoading(false);
-console.error('REGISTER ERROR:',error);
-showAlert(error.message,'error');
+console.error(error);
 });
 });
 })();
