@@ -91,16 +91,23 @@ method:'POST',
 body:payload
 })
 .then(function(res){
-console.log('STATUS:',res.status);
-console.log('FINAL URL:',res.url);
-console.log('REDIRECTED:',res.redirected);
-return res.text();
+return res.json();
 })
-.then(function(text){
-console.log('SERVER RESPONSE:',text);
+.then(function(data){
+setLoading(false);
+if(data.status===1){
+window.location.reload();
+return;
+}
+if(data.field){
+showFieldError(data.field,data.message);
+return;
+}
+showAlert(data.message||'Registration failed','error');
 })
 .catch(function(error){
-console.error('FETCH ERROR:',error);
+setLoading(false);
+showAlert(error.message,'error');
 });
 });
 })();
