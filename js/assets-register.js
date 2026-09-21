@@ -77,6 +77,7 @@ showFieldError('address','Address is required');
 return;
 }
 var payload=new URLSearchParams();
+payload.append('debugMarker','LATEST_JS_20260921');
 payload.append('customerName',customerName);
 payload.append('email',email);
 payload.append('phone1',phone1);
@@ -90,10 +91,16 @@ method:'POST',
 body:payload
 })
 .then(function(res){
+console.log('STATUS:',res.status);
+console.log('FINAL URL:',res.url);
+console.log('REDIRECTED:',res.redirected);
 return res.text();
 })
 .then(function(text){
 console.log('SERVER RESPONSE:',text);
+})
+.catch(function(error){
+console.error('FETCH ERROR:',error);
 });
 });
 })();
