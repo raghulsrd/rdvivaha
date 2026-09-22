@@ -109,7 +109,10 @@ method:'POST',
 body:payload
 })
 .then(function(res){
-return res.text();
+    if(!res.ok){
+        throw new Error('Server error: ' + res.status);
+    }
+    return res.text();
 })
 .then(function(text){
 console.log('SERVER RESPONSE:',text);
