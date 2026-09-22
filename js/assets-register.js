@@ -6,6 +6,7 @@ if(!form)return;
 var alertBox=document.getElementById('formAlert');
 var submitBtn=document.getElementById('submitBtn');
 var btnLabel=submitBtn.querySelector('.btn-label');
+
 function clearErrors(){
 alertBox.hidden=true;
 alertBox.textContent='';
@@ -18,12 +19,17 @@ form.querySelectorAll('.form-control').forEach(function(el){
 el.classList.remove('is-invalid');
 });
 }
+
 function showAlert(message,type){
 alertBox.textContent=message;
 alertBox.className='register__alert is-'+type;
 alertBox.hidden=false;
-alertBox.scrollIntoView({behavior:'smooth',block:'center'});
+alertBox.scrollIntoView({
+behavior:'smooth',
+block:'center'
+});
 }
+
 function showFieldError(field,message){
 var errorBox=form.querySelector('[data-error-for="'+field+'"]');
 var input=form.querySelector('[name="'+field+'"]');
@@ -36,78 +42,112 @@ input.classList.add('is-invalid');
 input.focus();
 }
 }
+
 function setLoading(loading){
 submitBtn.disabled=loading;
 btnLabel.textContent=loading?'Submitting…':'Register';
 }
+
 form.addEventListener('submit',function(e){
 e.preventDefault();
 clearErrors();
+
 var customerName=form.customerName.value.trim();
 var email=form.email.value.trim();
 var phone1=form.phone1.value.replace(/\D/g,'');
 var phone2=form.phone2.value.replace(/\D/g,'');
 var address=form.address.value.trim();
+
 if(customerName===''){
 showFieldError('customerName','Full name is required');
 return;
 }
+
 if(email===''){
 showFieldError('email','Email is required');
 return;
 }
+
 if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
 showFieldError('email','Enter a valid email address');
 return;
 }
+
 if(!/^[6-9]\d{9}$/.test(phone1)){
 showFieldError('phone1','Enter a valid 10 digit phone number');
 return;
 }
+
 if(phone2!==''&&!/^[6-9]\d{9}$/.test(phone2)){
 showFieldError('phone2','Enter a valid alternate phone number');
 return;
 }
+
 if(phone2!==''&&phone1===phone2){
 showFieldError('phone2','Both phone numbers cannot be same');
 return;
 }
+
 if(address===''){
 showFieldError('address','Address is required');
 return;
 }
+
 var payload=new URLSearchParams();
-payload.append('debugMarker','LATEST_JS_20260921');
 payload.append('customerName',customerName);
 payload.append('email',email);
 payload.append('phone1',phone1);
 payload.append('phone2',phone2);
 payload.append('address',address);
 
-console.log('FINAL POST BODY:',payload.toString());
+console.log('POST DATA:',payload.toString());
+
+setLoading(true);
 
 fetch(API_URL,{
 method:'POST',
 body:payload
 })
 .then(function(res){
-return res.json();
+console.log('HTTP STATUS:',res.status);
+return res.text();
 })
-.then(function(data){
+.then(function(text){
+console.log('RAW RESPONSE:',text);
+
+var data;
+
+try{
+data=JSON.parse(text);
+}catch(e){
+throw new Error('Server returned invalid response: '+text);
+}
+
 setLoading(false);
+
 if(data.status===1){
+showAlert(data.message||'Registration successful','success');
+form.reset();
+
+setTimeout(function(){
 window.location.reload();
+},1000);
+
 return;
 }
+
 if(data.field){
 showFieldError(data.field,data.message);
 return;
 }
+
 showAlert(data.message||'Registration failed','error');
 })
 .catch(function(error){
 setLoading(false);
-showAlert(error.message,'error');
+console.error('REGISTER ERROR:',error);
+showAlert(error.message||'Failed to fetch','error');
 });
 });
+
 })();
