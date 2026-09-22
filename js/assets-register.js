@@ -109,29 +109,26 @@ method:'POST',
 body:payload
 })
 .then(function(res){
-console.log('HTTP STATUS:',res.status);
 return res.text();
 })
 .then(function(text){
-console.log('RAW RESPONSE:',text);
+console.log('SERVER RESPONSE:',text);
 
 var data;
-
 try{
 data=JSON.parse(text);
 }catch(e){
-throw new Error('Server returned invalid response: '+text);
+throw new Error('Invalid server response');
 }
 
 setLoading(false);
 
 if(data.status===1){
 showAlert(data.message||'Registration successful','success');
-form.reset();
 
 setTimeout(function(){
-window.location.reload();
-},1000);
+window.location.href=window.location.href;
+},1500);
 
 return;
 }
@@ -146,7 +143,7 @@ showAlert(data.message||'Registration failed','error');
 .catch(function(error){
 setLoading(false);
 console.error('REGISTER ERROR:',error);
-showAlert(error.message||'Failed to fetch','error');
+showAlert(error.message,'error');
 });
 });
 
